@@ -259,7 +259,7 @@ func CheckVRAM() (int64, error) {
 
 		vram, err := strconv.ParseInt(strings.TrimSpace(line), 10, 64)
 		if err != nil {
-			return 0, fmt.Errorf("failed to parse available VRAM: %v", err)
+			return 0, fmt.Errorf("failed to parse available VRAM: %w", err)
 		}
 
 		freeMiB += vram
@@ -617,13 +617,13 @@ func (llm *llama) Predict(ctx context.Context, predict PredictOpts, fn func(Pred
 		enc.SetEscapeHTML(false)
 
 		if err := enc.Encode(request); err != nil {
-			return fmt.Errorf("failed to marshal data: %v", err)
+			return fmt.Errorf("failed to marshal data: %w", err)
 		}
 
 		endpoint := fmt.Sprintf("http://127.0.0.1:%d/completion", llm.Port)
 		req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, buffer)
 		if err != nil {
-			return fmt.Errorf("error creating POST request: %v", err)
+			return fmt.Errorf("error creating POST request: %w", err)
 		}
 		req.Header.Set("Content-Type", "application/json")
 
